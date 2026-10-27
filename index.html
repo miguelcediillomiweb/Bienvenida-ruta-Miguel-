@@ -104,6 +104,32 @@
       <p class="modal-footnote">El video se cerrará automáticamente al terminar.</p>
     </div>
   </div>
+
+  <section class="contact-prompt" id="contact-prompt" role="dialog" aria-modal="true" aria-labelledby="contact-prompt-title" hidden>
+    <button class="prompt-backdrop" id="prompt-backdrop" type="button" aria-label="Cerrar invitación"></button>
+    <div class="prompt-card">
+      <button class="prompt-close" id="close-contact-prompt" type="button" aria-label="Cerrar">×</button>
+      <div class="prompt-icon" aria-hidden="true">📲</div>
+      <p class="eyebrow">PEÑAFIEL · RUTA 1371</p>
+      <h2 id="contact-prompt-title">¡Guarda mi contacto!</h2>
+      <p class="prompt-copy">Ten los datos de Miguel Ángel, tu preventista de ruta, siempre a la mano.</p>
+      <button class="prompt-primary" id="download-contact-again" type="button">Descargar tarjeta de contacto</button>
+      <p class="prompt-note">Después abre el archivo descargado y confirma <strong>Guardar contacto</strong> en tu teléfono.</p>
+      <div class="prompt-divider"><span></span>SI GUSTAS<span></span></div>
+      <form id="customer-form" class="customer-form">
+        <h3>¿Quieres dejar tus datos?</h3>
+        <p>Es opcional. Solo comparte lo que te resulte cómodo.</p>
+        <label>Tu nombre <span>(opcional)</span><input name="nombre" type="text" maxlength="80" autocomplete="name" placeholder="Cómo te llamas"></label>
+        <label>Nombre de tu negocio <span>(opcional)</span><input name="negocio" type="text" maxlength="100" autocomplete="organization" placeholder="Nombre del negocio"></label>
+        <label>Teléfono o WhatsApp <span>(opcional)</span><input name="telefono" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="Tu número de contacto"></label>
+        <label class="consent-label"><input name="consentimiento" type="checkbox" required><span>Acepto compartir estos datos con Miguel Ángel para mantener el contacto comercial. Entiendo que es voluntario.</span></label>
+        <button class="prompt-secondary" type="submit">Enviar mis datos</button>
+        <p class="form-status" id="customer-form-status" role="status" aria-live="polite"></p>
+      </form>
+      <button class="prompt-continue" id="continue-page" type="button">Continuar en la página <span>→</span></button>
+    </div>
+  </section>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="js/config.js"></script>
   <script src="js/main.js"></script>
