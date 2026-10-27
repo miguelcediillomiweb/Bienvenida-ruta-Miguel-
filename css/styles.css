@@ -65,3 +65,13 @@
 .prompt-continue{display:block;margin:17px auto 0;padding:9px 12px;border:0;background:transparent;color:#c4d5e9;font:600 12px 'DM Sans',sans-serif;cursor:pointer}
 .prompt-continue span{color:var(--cyan);font-size:17px;margin-left:5px}
 @media(max-width:420px){.prompt-card{padding:22px 18px}.prompt-icon{width:48px;height:48px}}
+
+/* Ajustes finales: tres acciones principales y tarjeta de WhatsApp */
+.action-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.contact-card,.catalog-card,.whatsapp-card{grid-column:auto;min-height:205px}
+.whatsapp-card .card-cta{color:#75f4a4}
+.whatsapp-card .card-glow{background:#24d9822c}
+.contact-prompt .prompt-divider{margin:18px 0 10px}
+.contact-prompt .prompt-note{margin:10px 0 0}
+@media(max-width:900px){.action-grid{grid-template-columns:1fr 1fr}.contact-card,.catalog-card,.whatsapp-card{grid-column:auto;min-height:175px}}
+@media(max-width:720px){.action-grid{grid-template-columns:1fr}.contact-card,.catalog-card,.whatsapp-card{min-height:150px}}
