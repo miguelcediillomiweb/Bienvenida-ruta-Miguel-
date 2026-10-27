@@ -4,7 +4,7 @@
 window.RUTA_CONFIG = {
   // WhatsApp en formato internacional: código de país + número, sin espacios ni signos.
   WHATSAPP_NUMBER: "525665470369",
-  WHATSAPP_MESSAGE: "Hola, soy Miguel Ángel. ¿En qué puedo ayudarte?",
+  WHATSAPP_MESSAGE: "Hola Miguel, necesito conocer los productos de Grupo Peñafiel.",
 
   // Datos para la tarjeta de contacto descargable.
   CONTACT_NAME: "Miguel Ángel",
@@ -12,9 +12,6 @@ window.RUTA_CONFIG = {
 
   // Catálogo digital existente. No modifica ni duplica ese proyecto.
   CATALOG_URL: "https://miguelcediillomiweb.github.io/Catalogo-pe-afiel-pdf/",
-
-  // URL del formulario de registro (Google Apps Script Web App). Déjalo vacío hasta configurarlo.
-  FORM_ENDPOINT: "",
 
   // Para el reproductor emergente de YouTube, pega SOLO el ID del video.
   YOUTUBE_VIDEO_ID: "",
