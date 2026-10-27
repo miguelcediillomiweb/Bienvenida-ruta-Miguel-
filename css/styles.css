@@ -5,3 +5,33 @@
 @media(max-width:900px){.action-grid{grid-template-columns:1fr 1fr}.contact-card{grid-column:1 / -1;min-height:155px}}\n@media(max-width:720px){.welcome-shell{width:calc(100% - 28px)}.topbar{padding-top:17px}.live-indicator{font-size:8px;padding:7px}.hero{min-height:260px;padding:38px 5% 32px}.hero-description{max-width:420px;font-size:14px}.orb-scene{right:-75px;opacity:.28}.hero-copy{max-width:100%}.section-hint{display:none}.action-grid{grid-template-columns:1fr}.contact-card{grid-column:auto}.action-card{min-height:155px;padding:19px}.card-content strong{font-size:18px}.campaign-panel{align-items:flex-start;flex-direction:column;padding:21px}.campaign-button{width:100%}.footer{align-items:flex-start;flex-direction:column;gap:8px}.modal-window{padding:12px}.modal-header h2{font-size:16px}}
 @media(max-width:380px){.brand-subtitle{font-size:10px}.live-indicator{max-width:105px;line-height:1.4}.hero{padding-left:1%;padding-right:1%}.hero h1{font-size:32px}.hero-description{font-size:13px}.action-card{gap:12px;padding:16px}.card-icon{width:42px;height:42px;flex-basis:42px}.card-content strong{font-size:16px}.card-kicker{font-size:8px}.campaign-panel{padding:17px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Refinamiento: solo tres acciones y pantalla final de despedida */
+.action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.contact-card{grid-column:auto;min-height:190px}
+.catalog-card{min-height:190px}
+.exit-area{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;margin:22px 0 8px;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(120deg,#102944aa,#0b1d36aa)}
+.exit-area p{margin:0;color:#b9cbe0;font-size:12px;line-height:1.6}
+.exit-button,.return-button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:46px;padding:12px 20px;border-radius:13px;border:1px solid #8be9e0a0;background:linear-gradient(120deg,#173e55,#112a45);color:#f4ffff;font:700 13px 'DM Sans',sans-serif;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s}
+.exit-button:hover,.return-button:hover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 8px 26px #42d9ce20}
+.exit-button span,.return-button span{font-size:18px;color:var(--cyan)}
+.exit-screen{position:relative;isolation:isolate;min-height:100svh;display:grid;place-items:center;overflow:hidden;padding:28px 16px;background:radial-gradient(ellipse at 50% 0%,#1d4265 0%,transparent 48%),linear-gradient(145deg,#061226,#081a31 58%,#101a3b)}
+.exit-screen[hidden],.welcome-shell[hidden]{display:none!important}
+.exit-card{position:relative;z-index:2;width:min(600px,100%);padding:clamp(26px,6vw,52px);text-align:center;border:1px solid #a7c8e82b;border-radius:26px;background:linear-gradient(145deg,#102a46ed,#091a31f2);box-shadow:0 24px 80px #0005;animation:exitAppear .65s cubic-bezier(.2,.8,.2,1) both}
+.exit-brand-mark{width:58px;height:58px;display:grid;place-items:center;margin:0 auto 20px;border-radius:20px;background:linear-gradient(145deg,#62f0df,#5d9fff);color:#08203a;font-size:27px;box-shadow:0 0 34px #4ce6dc30}
+.exit-card>.eyebrow{color:var(--cyan);font-size:10px;line-height:1.6}
+.exit-card h1{font-size:clamp(31px,6vw,48px);margin:14px 0 20px}
+.exit-divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 23px;color:var(--gold)}
+.exit-divider span{width:50px;height:1px;background:linear-gradient(90deg,transparent,#ffd58a)}
+.exit-divider span:last-child{transform:rotate(180deg)}
+.exit-divider i{font-style:normal}
+.exit-message{font-size:clamp(15px,2.5vw,18px);line-height:1.8;color:#c4d3e7;margin:12px auto;max-width:440px}
+.exit-message strong{color:#f4f8ff}
+.exit-signoff{margin:28px 0;color:var(--gold);font:800 clamp(20px,3.6vw,27px) Manrope,sans-serif;line-height:1.5}
+.exit-signoff span{font:500 13px 'DM Sans',sans-serif;color:#b7c9df}
+.return-button{margin-top:5px;background:linear-gradient(120deg,#173e55,#112a45)}
+.exit-glow{position:absolute;z-index:-1;border-radius:50%;filter:blur(80px);opacity:.2;pointer-events:none;animation:drift 12s ease-in-out infinite alternate}
+.exit-glow-one{width:300px;height:300px;left:-100px;top:15%;background:#27d8d0}
+.exit-glow-two{width:340px;height:340px;right:-120px;bottom:5%;background:#5269ff;animation-delay:-4s}
+@keyframes exitAppear{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:720px){.action-grid{grid-template-columns:1fr}.contact-card,.catalog-card{min-height:155px}.exit-area{padding:18px 14px}.exit-card{border-radius:22px}}
