@@ -4,7 +4,8 @@
   const config = window.RUTA_CONFIG || {};
   const $ = (selector) => document.querySelector(selector);
   const whatsappLink = $("#whatsapp-link");
-  const catalogLink = $("#catalog-link");\n  const contactLink = $("#contact-link");
+  const catalogLink = $("#catalog-link");
+  const contactLink = $("#contact-link");
   const campaignPanel = $("#campaign-panel");
   const openVideoButton = $("#open-video");
   const modal = $("#video-modal");
@@ -28,7 +29,7 @@
 
   function configureLinks() {
     const number = String(config.WHATSAPP_NUMBER || "").replace(/\D/g, "");
-    const message = encodeURIComponent(config.WHATSAPP_MESSAGE || "Hola, soy Miguel. ¿En qué puedo ayudarte?");
+    const message = encodeURIComponent(config.WHATSAPP_MESSAGE || "Hola, soy Miguel Ángel. ¿En qué puedo ayudarte?");
     if (number) whatsappLink.href = "https://wa.me/" + number + "?text=" + message;
     else whatsappLink.addEventListener("click", (event) => {
       event.preventDefault();
@@ -43,12 +44,16 @@
   }
 
   function buildContactCard() {
-    const number = String(config.WHATSAPP_NUMBER || "").replace(/\\D/g, "");
+    const number = String(config.WHATSAPP_NUMBER || "").replace(/\D/g, "");
     const name = config.CONTACT_NAME || "Miguel Ángel";
     const role = config.CONTACT_ROLE || "Preventa de Ruta";
     const catalog = config.CATALOG_URL || "";
     const pageUrl = window.location.href.split("#")[0];
-    const escapeVCard = (value) => String(value || "").replace(/\\/g, "\\\\").replace(/\\n/g, "\\\\n").replace(/,/g, "\\\\,").replace(/;/g, "\\\\;");
+    const escapeVCard = (value) => String(value || "")
+      .replace(/\\/g, "\\\\")
+      .replace(/\n/g, "\\n")
+      .replace(/,/g, "\\,")
+      .replace(/;/g, "\\;");
     const lines = [
       "BEGIN:VCARD",
       "VERSION:3.0",
@@ -61,7 +66,7 @@
       "NOTE:" + escapeVCard("Contacto comercial Peñafiel. " + role + ". Catálogo digital: " + catalog + " | Página de bienvenida: " + pageUrl),
       "END:VCARD"
     ];
-    return lines.join("\\r\\n") + "\\r\\n";
+    return lines.join("\r\n") + "\r\n";
   }
 
   function prepareContactDownload(event) {
@@ -75,16 +80,8 @@
     document.body.appendChild(link);
     link.click();
     link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+    window.setTimeout(() => URL.revokeObjectURL(url), 2000);
     showToast("Tarjeta lista. Abre el archivo descargado y elige Guardar contacto.");
-  }
-
-  function openCampaign() {
-    if (config.CAMPAIGN_TYPE === "link" && config.CAMPAIGN_URL) {
-      window.open(config.CAMPAIGN_URL, "_blank", "noopener,noreferrer");
-      return;
-    }
-    openModal();
   }
 
   function campaignAlreadySeen() {
@@ -104,7 +101,7 @@
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
     if (player && typeof player.stopVideo === "function") player.stopVideo();
-    openVideoButton.focus({ preventScroll: true });
+    if (openVideoButton) openVideoButton.focus({ preventScroll: true });
   }
 
   function openModal() {
@@ -112,7 +109,7 @@
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     if (!config.YOUTUBE_VIDEO_ID) {
-      playerHost.innerHTML = '<div class="video-placeholder"><span>▶</span><strong>Tu comercial aparecerá aquí</strong><p>Agrega el ID del video de YouTube en <b>js/config.js</b> para activar esta sección.</p></div>';
+      playerHost.innerHTML = '<div class="video-placeholder"><span>▶</span><strong>Tu contenido aparecerá aquí</strong><p>Agrega el ID de YouTube en <b>js/config.js</b>, o configura una campaña con enlace externo.</p></div>';
       const placeholder = playerHost.querySelector(".video-placeholder");
       Object.assign(placeholder.style, {height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"12px",padding:"24px",textAlign:"center",color:"#eef7ff",fontFamily:"DM Sans, sans-serif"});
       placeholder.querySelector("span").style.cssText = "font-size:30px;color:#ffd58a";
@@ -134,6 +131,14 @@
         document.head.appendChild(script);
       }
     }
+  }
+
+  function openCampaign() {
+    if (config.CAMPAIGN_TYPE === "link" && config.CAMPAIGN_URL) {
+      window.open(config.CAMPAIGN_URL, "_blank", "noopener,noreferrer");
+      return;
+    }
+    openModal();
   }
 
   function createAndPlay() {
@@ -159,14 +164,15 @@
   }
 
   configureLinks();
+  contactLink.addEventListener("click", prepareContactDownload);
   if (campaignAlreadySeen()) campaignPanel.classList.add("is-hidden");
 
-  contactLink.addEventListener("click", prepareContactDownload);\n  openVideoButton.addEventListener("click", openCampaign);
+  openVideoButton.addEventListener("click", openCampaign);
   closeVideoButton.addEventListener("click", closeModal);
   closeBackdrop.addEventListener("click", closeModal);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal.classList.contains("is-open")) closeModal();
   });
 
-  // Cuando el usuario cierra antes de terminar, el botón permanece disponible.
+  // Si se cierra antes de terminar, el botón de campaña permanece disponible.
 })();
