@@ -20,7 +20,7 @@
   const promptBackdrop = $("#prompt-backdrop");
   const downloadAgainButton = $("#download-contact-again");
   const continuePageButton = $("#continue-page");
-  const whatsappLink = $("#whatsapp-link");
+
   const SESSION_KEY = "ruta1371-campana-vista";
   let player = null, apiReady = false, pendingPlay = false, toastTimer = null;
 
@@ -32,15 +32,10 @@
   }
 
   function configureLinks() {
-    if (config.CATALOG_URL) catalogLink.href = config.CATALOG_URL;
-    else catalogLink.addEventListener("click", (event) => {
-      event.preventDefault();
-      showToast("Configura el enlace del catálogo en js/config.js.");
-    });
     const phone = String(config.WHATSAPP_NUMBER || "").replace(/\D/g, "");
     const message = encodeURIComponent(config.WHATSAPP_MESSAGE || "Hola Miguel, necesito conocer los productos de Grupo Peñafiel.");
-    if (phone) whatsappLink.href = "https://wa.me/" + phone + "?text=" + message;
-    else whatsappLink.addEventListener("click", (event) => { event.preventDefault(); showToast("Configura el número de WhatsApp en js/config.js."); });
+    if (phone) catalogLink.href = "https://wa.me/" + phone + "?text=" + message;
+    else catalogLink.addEventListener("click", (event) => { event.preventDefault(); showToast("Configura el número de WhatsApp en js/config.js."); });
   }
 
   function buildContactCard() {
