@@ -4,7 +4,7 @@
   const config = window.RUTA_CONFIG || {};
   const $ = (selector) => document.querySelector(selector);
   const whatsappLink = $("#whatsapp-link");
-  const catalogLink = $("#catalog-link");
+  const catalogLink = $("#catalog-link");\n  const contactLink = $("#contact-link");
   const campaignPanel = $("#campaign-panel");
   const openVideoButton = $("#open-video");
   const modal = $("#video-modal");
@@ -40,6 +40,51 @@
       event.preventDefault();
       showToast("Configura el enlace del catálogo en js/config.js.");
     });
+  }
+
+  function buildContactCard() {
+    const number = String(config.WHATSAPP_NUMBER || "").replace(/\\D/g, "");
+    const name = config.CONTACT_NAME || "Miguel Ángel";
+    const role = config.CONTACT_ROLE || "Preventa de Ruta";
+    const catalog = config.CATALOG_URL || "";
+    const pageUrl = window.location.href.split("#")[0];
+    const escapeVCard = (value) => String(value || "").replace(/\\/g, "\\\\").replace(/\\n/g, "\\\\n").replace(/,/g, "\\\\,").replace(/;/g, "\\\\;");
+    const lines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      "N:" + escapeVCard(name) + ";;;;",
+      "FN:" + escapeVCard(name),
+      "ORG:Peñafiel",
+      "TITLE:" + escapeVCard(role),
+      "TEL;TYPE=CELL,VOICE:+" + number,
+      "URL:" + (catalog || pageUrl),
+      "NOTE:" + escapeVCard("Contacto comercial Peñafiel. " + role + ". Catálogo digital: " + catalog + " | Página de bienvenida: " + pageUrl),
+      "END:VCARD"
+    ];
+    return lines.join("\\r\\n") + "\\r\\n";
+  }
+
+  function prepareContactDownload(event) {
+    event.preventDefault();
+    const vcard = buildContactCard();
+    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Miguel-Angel-Preventa-de-Ruta.vcf";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+    showToast("Tarjeta lista. Abre el archivo descargado y elige Guardar contacto.");
+  }
+
+  function openCampaign() {
+    if (config.CAMPAIGN_TYPE === "link" && config.CAMPAIGN_URL) {
+      window.open(config.CAMPAIGN_URL, "_blank", "noopener,noreferrer");
+      return;
+    }
+    openModal();
   }
 
   function campaignAlreadySeen() {
@@ -116,7 +161,7 @@
   configureLinks();
   if (campaignAlreadySeen()) campaignPanel.classList.add("is-hidden");
 
-  openVideoButton.addEventListener("click", openModal);
+  contactLink.addEventListener("click", prepareContactDownload);\n  openVideoButton.addEventListener("click", openCampaign);
   closeVideoButton.addEventListener("click", closeModal);
   closeBackdrop.addEventListener("click", closeModal);
   document.addEventListener("keydown", (event) => {
