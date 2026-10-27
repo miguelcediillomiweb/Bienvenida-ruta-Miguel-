@@ -13,6 +13,9 @@ window.RUTA_CONFIG = {
   // Catálogo digital existente. No modifica ni duplica ese proyecto.
   CATALOG_URL: "https://miguelcediillomiweb.github.io/Catalogo-pe-afiel-pdf/",
 
+  // URL del formulario de registro (Google Apps Script Web App). Déjalo vacío hasta configurarlo.
+  FORM_ENDPOINT: "",
+
   // Para el reproductor emergente de YouTube, pega SOLO el ID del video.
   YOUTUBE_VIDEO_ID: "",
 
