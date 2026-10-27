@@ -15,6 +15,13 @@
   const exitScreen = $("#exit-screen");
   const exitButton = $("#exit-page");
   const returnButton = $("#return-home");
+  const contactPrompt = $("#contact-prompt");
+  const closePromptButton = $("#close-contact-prompt");
+  const promptBackdrop = $("#prompt-backdrop");
+  const downloadAgainButton = $("#download-contact-again");
+  const continuePageButton = $("#continue-page");
+  const customerForm = $("#customer-form");
+  const customerFormStatus = $("#customer-form-status");
   const SESSION_KEY = "ruta1371-campana-vista";
   let player = null, apiReady = false, pendingPlay = false, toastTimer = null;
 
@@ -51,7 +58,7 @@
     ].join("\r\n") + "\r\n";
   }
 
-  function prepareContactDownload(event) {
+  function downloadContactFile() {
     event.preventDefault();
     const blob = new Blob([buildContactCard()], {type:"text/vcard;charset=utf-8"});
     const url = URL.createObjectURL(blob);
@@ -141,6 +148,11 @@
   }
   configureLinks();
   contactLink.addEventListener("click",prepareContactDownload);
+  downloadAgainButton.addEventListener("click",downloadContactFile);
+  closePromptButton.addEventListener("click",closeContactPrompt);
+  promptBackdrop.addEventListener("click",closeContactPrompt);
+  continuePageButton.addEventListener("click",closeContactPrompt);
+  customerForm.addEventListener("submit",submitCustomerForm);
   exitButton.addEventListener("click",showExitScreen);
   returnButton.addEventListener("click",returnHome);
   if (campaignAlreadySeen()) campaignPanel.classList.add("is-hidden");
