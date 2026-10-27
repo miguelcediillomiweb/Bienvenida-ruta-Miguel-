@@ -59,7 +59,6 @@
   }
 
   function downloadContactFile() {
-    event.preventDefault();
     const blob = new Blob([buildContactCard()], {type:"text/vcard;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -69,7 +68,57 @@
     link.click();
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast("Tu contacto está listo. Abre el archivo y confirma Guardar contacto en tu teléfono.");
+    showToast("Tarjeta descargada. Abre el archivo y confirma Guardar contacto en tu teléfono.");
+  }
+
+  function showContactPrompt() {
+    contactPrompt.hidden = false;
+    contactPrompt.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+    closePromptButton.focus({preventScroll:true});
+  }
+  function closeContactPrompt() {
+    contactPrompt.classList.remove("is-open");
+    contactPrompt.hidden = true;
+    document.body.style.overflow = "";
+  }
+  function prepareContactDownload(event) {
+    event.preventDefault();
+    downloadContactFile();
+    window.setTimeout(showContactPrompt, 350);
+  }
+  function submitCustomerForm(event) {
+    event.preventDefault();
+    const endpoint = String(config.FORM_ENDPOINT || "").trim();
+    if (!endpoint) {
+      customerFormStatus.textContent = "El formulario aún no está conectado a una hoja de registro. Por ahora no se ha enviado ni guardado ningún dato.";
+      return;
+    }
+    const data = new FormData(customerForm);
+    const record = {
+      nombre: String(data.get("nombre") || "").trim(),
+      negocio: String(data.get("negocio") || "").trim(),
+      telefono: String(data.get("telefono") || "").trim(),
+      consentimiento: data.get("consentimiento") === "on",
+      fecha: new Date().toISOString(),
+      origen: window.location.href.split("#")[0]
+    };
+    if (!record.nombre && !record.negocio && !record.telefono) {
+      customerFormStatus.textContent = "Escribe al menos un dato básico o continúa sin compartir información.";
+      return;
+    }
+    const submitButton = customerForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    customerFormStatus.textContent = "Enviando…";
+    fetch(endpoint, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(record)})
+      .then(() => {
+        customerFormStatus.textContent = "Solicitud enviada. Gracias por compartir tus datos.";
+        customerForm.reset();
+      })
+      .catch(() => {
+        customerFormStatus.textContent = "No se pudo enviar. Inténtalo más tarde o continúa en la página.";
+      })
+      .finally(() => { submitButton.disabled = false; });
   }
 
   function showExitScreen() {
