@@ -20,8 +20,7 @@
   const promptBackdrop = $("#prompt-backdrop");
   const downloadAgainButton = $("#download-contact-again");
   const continuePageButton = $("#continue-page");
-  const customerForm = $("#customer-form");
-  const customerFormStatus = $("#customer-form-status");
+  const whatsappLink = $("#whatsapp-link");
   const SESSION_KEY = "ruta1371-campana-vista";
   let player = null, apiReady = false, pendingPlay = false, toastTimer = null;
 
@@ -38,6 +37,10 @@
       event.preventDefault();
       showToast("Configura el enlace del catálogo en js/config.js.");
     });
+    const phone = String(config.WHATSAPP_NUMBER || "").replace(/\D/g, "");
+    const message = encodeURIComponent(config.WHATSAPP_MESSAGE || "Hola Miguel, necesito conocer los productos de Grupo Peñafiel.");
+    if (phone) whatsappLink.href = "https://wa.me/" + phone + "?text=" + message;
+    else whatsappLink.addEventListener("click", (event) => { event.preventDefault(); showToast("Configura el número de WhatsApp en js/config.js."); });
   }
 
   function buildContactCard() {
@@ -87,40 +90,6 @@
     downloadContactFile();
     window.setTimeout(showContactPrompt, 350);
   }
-  function submitCustomerForm(event) {
-    event.preventDefault();
-    const endpoint = String(config.FORM_ENDPOINT || "").trim();
-    if (!endpoint) {
-      customerFormStatus.textContent = "El formulario aún no está conectado a una hoja de registro. Por ahora no se ha enviado ni guardado ningún dato.";
-      return;
-    }
-    const data = new FormData(customerForm);
-    const record = {
-      nombre: String(data.get("nombre") || "").trim(),
-      negocio: String(data.get("negocio") || "").trim(),
-      telefono: String(data.get("telefono") || "").trim(),
-      consentimiento: data.get("consentimiento") === "on",
-      fecha: new Date().toISOString(),
-      origen: window.location.href.split("#")[0]
-    };
-    if (!record.nombre && !record.negocio && !record.telefono) {
-      customerFormStatus.textContent = "Escribe al menos un dato básico o continúa sin compartir información.";
-      return;
-    }
-    const submitButton = customerForm.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    customerFormStatus.textContent = "Enviando…";
-    fetch(endpoint, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(record)})
-      .then(() => {
-        customerFormStatus.textContent = "Solicitud enviada. Gracias por compartir tus datos.";
-        customerForm.reset();
-      })
-      .catch(() => {
-        customerFormStatus.textContent = "No se pudo enviar. Inténtalo más tarde o continúa en la página.";
-      })
-      .finally(() => { submitButton.disabled = false; });
-  }
-
   function showExitScreen() {
     if (modal.classList.contains("is-open")) closeModal();
     welcomeShell.hidden = true;
@@ -201,7 +170,7 @@
   closePromptButton.addEventListener("click",closeContactPrompt);
   promptBackdrop.addEventListener("click",closeContactPrompt);
   continuePageButton.addEventListener("click",closeContactPrompt);
-  customerForm.addEventListener("submit",submitCustomerForm);
+
   exitButton.addEventListener("click",showExitScreen);
   returnButton.addEventListener("click",returnHome);
   if (campaignAlreadySeen()) campaignPanel.classList.add("is-hidden");
